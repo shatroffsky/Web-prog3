@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Додавання показників - Система захисту</title>
+    <style>
+        body { font-family: sans-serif; margin: 40px; background-color: #f4f7f6; }
+        .container { background-color: white; padding: 20px; border-radius: 8px; max-width: 600px; margin: auto; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input[type="text"], input[type="number"], input[type="date"] {
+            width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px;
+        }
+        button { background-color: #007bff; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background-color: #0056b3; }
+        .error { color: #721c24; background-color: #f8d7da; padding: 10px; border-radius: 4px; margin-bottom: 15px; }
+        .record-list { margin-top: 30px; }
+        .record-item { background: #e9ecef; padding: 10px; margin-bottom: 10px; border-left: 5px solid #007bff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Реєстрація показників перенапруги</h2>
+        
+        {{if .Error}}
+            <div class="error"><strong>Помилка:</strong> {{.Error}}</div>
+        {{end}}
+
+        <form method="POST" action="/">
+            <div class="form-group">
+                <label for="deviceName">Назва пристрою (лінії):</label>
+                <input type="text" id="deviceName" name="deviceName" placeholder="Наприклад: Ввідний щит 1" value="{{.FormData.DeviceName}}">
+            </div>
+            <div class="form-group">
+                <label for="voltage">Зафіксована напруга (В):</label>
+                <input type="number" id="voltage" name="voltage" placeholder="Наприклад: 260" value="{{.FormData.Voltage}}">
+            </div>
+            <div class="form-group">
+                <label for="date">Дата фіксації:</label>
+                <input type="date" id="date" name="date" value="{{.FormData.Date}}">
+            </div>
+            <button type="submit">Зберегти показник</button>
+        </form>
+
+        <div class="record-list">
+            <h3>Історія зафіксованих показників:</h3>
+            {{range .Records}}
+                <div class="record-item">
+                    <strong>{{.DeviceName}}</strong> — {{.Voltage}} В (Дата: {{.Date}})
+                </div>
+            {{else}}
+                <p>Поки що показників немає.</p>
+            {{end}}
+        </div>
+    </div>
+</body>
+</html>
